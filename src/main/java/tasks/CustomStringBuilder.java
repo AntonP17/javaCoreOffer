@@ -12,10 +12,6 @@ public class CustomStringBuilder {
         this.text = "";
     }
 
-    public CustomStringBuilder(String text) {
-        this.text = text;
-    }
-
     public void append(String s) {
         this.text += s;
         caretaker.saveState(this);
@@ -56,8 +52,8 @@ public class CustomStringBuilder {
     }
 
     private class StringBuilderCaretaker {
-        private Stack<CustomStringBuilder.StringBuilderMemento> undoStack = new Stack<>();
-        private Stack<CustomStringBuilder.StringBuilderMemento> redoStack = new Stack<>();
+        private Stack<StringBuilderMemento> undoStack = new Stack<>();
+        private Stack<StringBuilderMemento> redoStack = new Stack<>();
 
         public void saveState(CustomStringBuilder stringBuilder) {
             undoStack.push(stringBuilder.save());
@@ -66,8 +62,9 @@ public class CustomStringBuilder {
 
         public void undo(CustomStringBuilder stringBuilder) {
             if (!undoStack.isEmpty()) {
-                redoStack.push(stringBuilder.save());
-                stringBuilder.restore(undoStack.pop());
+                StringBuilderMemento memento = undoStack.pop();
+                redoStack.push(memento);
+                stringBuilder.restore(memento);
             } else {
                 System.out.println("Nothing to undo.");
             }
@@ -75,8 +72,9 @@ public class CustomStringBuilder {
 
         public void redo(CustomStringBuilder stringBuilder) {
             if (!redoStack.isEmpty()) {
-                undoStack.push(stringBuilder.save());
-                stringBuilder.restore(redoStack.pop());
+                StringBuilderMemento memento = redoStack.pop();
+                undoStack.push(memento);
+                stringBuilder.restore(memento);
             } else {
                 System.out.println("Nothing to redo.");
             }
