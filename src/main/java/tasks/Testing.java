@@ -2,7 +2,7 @@ package tasks;
 
 public class Testing {
     public static void main(String[] args) {
-        customStringBuilder stringBuilder = new customStringBuilder();
+        CustomStringBuilder stringBuilder = new CustomStringBuilder();
         StringBuilderCaretaker caretaker = new StringBuilderCaretaker();
 
         stringBuilder.append("Hello , how are you ..");
