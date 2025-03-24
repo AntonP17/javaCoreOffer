@@ -1,6 +1,8 @@
 package tasks;
 
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class CustomStringBuilder {
@@ -42,7 +44,7 @@ public class CustomStringBuilder {
     }
 
     private StringBuilderMemento save() {
-        return new CustomStringBuilder.StringBuilderMemento(this.text);
+        return new StringBuilderMemento(this.text);
     }
 
     private void restore(CustomStringBuilder.StringBuilderMemento memento) {
@@ -52,29 +54,30 @@ public class CustomStringBuilder {
     }
 
     private class StringBuilderCaretaker {
-        private Stack<StringBuilderMemento> undoStack = new Stack<>();
-        private Stack<StringBuilderMemento> redoStack = new Stack<>();
+        private List<StringBuilderMemento> states = new ArrayList<>();
+        private int currentStateIndex = -1;
 
         public void saveState(CustomStringBuilder stringBuilder) {
-            undoStack.push(stringBuilder.save());
-            redoStack.clear();
+            if (currentStateIndex < states.size() - 1) {
+                states.subList(currentStateIndex + 1, states.size()).clear();
+            }
+            states.add(stringBuilder.save());
+            currentStateIndex++;
         }
 
         public void undo(CustomStringBuilder stringBuilder) {
-            if (!undoStack.isEmpty()) {
-                StringBuilderMemento memento = undoStack.pop();
-                redoStack.push(memento);
-                stringBuilder.restore(memento);
+            if (currentStateIndex > 0) {
+                currentStateIndex--;
+                stringBuilder.restore(states.get(currentStateIndex));
             } else {
                 System.out.println("Nothing to undo.");
             }
         }
 
         public void redo(CustomStringBuilder stringBuilder) {
-            if (!redoStack.isEmpty()) {
-                StringBuilderMemento memento = redoStack.pop();
-                undoStack.push(memento);
-                stringBuilder.restore(memento);
+            if (currentStateIndex < states.size() - 1) {
+                currentStateIndex++;
+                stringBuilder.restore(states.get(currentStateIndex));
             } else {
                 System.out.println("Nothing to redo.");
             }
