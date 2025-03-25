@@ -9,7 +9,7 @@ public class FrequencyCounter {
 
         Map<T, Integer> countMap = new HashMap<>();
         for (T element : array) {
-            countMap.put(element, countMap.getOrDefault(element, 0) + 1);
+            countMap.merge(element, 1, Integer::sum);
         }
         return countMap;
     }
@@ -18,7 +18,7 @@ public class FrequencyCounter {
     public static Map<Integer, Integer> getFrequencies(int[] array) {
         Map<Integer, Integer> countMap = new HashMap<>();
         for (int element : array) {
-            countMap.put(element, countMap.getOrDefault(element, 0) + 1);
+            countMap.merge(element, 1, Integer::sum);
         }
         return countMap;
     }
@@ -27,7 +27,7 @@ public class FrequencyCounter {
     public static Map<Double, Integer> getFrequencies(double[] array) {
         Map<Double, Integer> countMap = new HashMap<>();
         for (double element : array) {
-            countMap.put(element, countMap.getOrDefault(element, 0) + 1);
+            countMap.merge(element, 1, Integer::sum);
         }
         return countMap;
     }
@@ -36,7 +36,7 @@ public class FrequencyCounter {
     public static Map<Character, Integer> getFrequencies(char[] array) {
         Map<Character, Integer> countMap = new HashMap<>();
         for (char element : array) {
-            countMap.put(element, countMap.getOrDefault(element, 0) + 1);
+            countMap.merge(element, 1, Integer::sum);
         }
         return countMap;
     }
